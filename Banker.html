@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banker's Deadlock Avoidance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea {
+            width: 300px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Banker's Deadlock Avoidance</h1>
+    <div class="container">
+        <label for="available">Available resources (separated by space):</label>
+        <input type="text" id="available"><br>
+
+        <label for="allocation">Allocation matrix:</label>
+        <textarea id="allocation" rows="4"></textarea><br>
+
+        <label for="max-claim">Maximum claim matrix:</label>
+        <textarea id="max-claim" rows="4"></textarea><br>
+
+        <button onclick="runAlgorithm()">Submit</button><br>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function runAlgorithm() {
+        let availableStr = document.getElementById('available').value;
+        let allocationStr = document.getElementById('allocation').value;
+        let maxClaimStr = document.getElementById('max-claim').value;
+
+        let available = availableStr.split(' ').map(Number);
+        let allocationRows = allocationStr.trim().split('\n');
+        let maxClaimRows = maxClaimStr.trim().split('\n');
+
+        let allocation = allocationRows.map(row => row.split(' ').map(Number));
+        let maxClaim = maxClaimRows.map(row => row.split(' ').map(Number));
+
+        let resultDiv = document.getElementById('result');
+        let { safe, sequence } = isSafeState(available, maxClaim, allocation);
+
+        if (safe) {
+            resultDiv.textContent = "System is in a safe state.\nSafe sequence: " + sequence.join(' ');
+        } else {
+            resultDiv.textContent = "System is in an unsafe state.";
+        }
+        }
+
+        function isSafeState(available, maxClaim, allocation) {
+            let work = available.slice();
+            let finish = Array(allocation.length).fill(false);
+            let safeSequence = [];
+
+            while (true) {
+                let found = false;
+
+                for (let i = 0; i < allocation.length; i++) {
+                    if (!finish[i] && canExecute(i, work, maxClaim, allocation)) {
+                        work = allocateResources(work, allocation[i]);
+                        finish[i] = true;
+                        safeSequence.push(i);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    if (finish.every(x => x)) {
+                        return { safe: true, sequence: safeSequence };
+                    } else {
+                        return { safe: false, sequence: [] };
+                    }
+                }
+            }
+        }
+
+        function canExecute(processIndex, work, maxClaim, allocation) {
+            for (let j = 0; j < work.length; j++) {
+                if (maxClaim[processIndex][j] - allocation[processIndex][j] > work[j]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function allocateResources(work, allocation) {
+            return work.map((val, index) => val + allocation[index]);
+        }
+
+    </script>
+</body>
+</html>

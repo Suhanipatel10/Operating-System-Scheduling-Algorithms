@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RR THEORY</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5)50%,rgba(0,0,0,0.5)50%),url(cover1.jpg);
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+        .content{
+            width: 100%;
+            position: absolute;
+            top: 30%;
+            transform: translateY(-50%);
+            text-align: center;
+            color: floralwhite;
+        }
+        .content h1{
+            font-size: 70px;
+            margin-top: 80px;
+        }
+        .content p{
+            margin: 20px auto;
+            font-weight: 100;
+            line-height: 25px;
+        }
+        button{
+            width:200px;
+            padding: 15px 0;
+            text-align: center;
+            margin: 20px 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid whitesmoke;
+            background:transparent;
+            color: rgb(251, 251, 250);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="content">
+            <h1>Round Robin theory</h1>
+            <p>Round robin scheduling is a pre-emptive process scheduling algorithm that allocates a fixed time slice to each process in a cyclic manner.It ensures fairness by allowing each process to execute for a specific time period, typically called a time quantum or time slice, before moving to the next process in the queue.If a process doesn't finish within its time slice, it's preempted and placed at the end of the queue to wait for its next turn. This algorithm is commonly used in time-sharing environments where multiple processes compete for CPU time, ensuring that no process monopolizes the CPU and all processes get a fair share of execution time.</p>
+            <div>
+                <button type="button"><a href="file:///C:/Users/suhan/OneDrive/Desktop/OS/RoundRobin.html">Round Robin Simulator</a></button>
+            </div>
+        </div>
+        
+    </div>
+</body>

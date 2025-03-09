@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAN DISK THEORY</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5)50%,rgba(0,0,0,0.5)50%),url(cover1.jpg);
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+        .content{
+            width: 100%;
+            position: absolute;
+            top: 30%;
+            transform: translateY(-50%);
+            text-align: center;
+            color: floralwhite;
+        }
+        .content h1{
+            font-size: 70px;
+            margin-top: 80px;
+        }
+        .content p{
+            margin: 20px auto;
+            font-weight: 100;
+            line-height: 25px;
+        }
+        button{
+            width:200px;
+            padding: 15px 0;
+            text-align: center;
+            margin: 20px 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid whitesmoke;
+            background:transparent;
+            color: rgb(251, 251, 250);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="content">
+            <h1>The Scan Disk Algorithm</h1>
+            <p>The Scan Disk algorithm, also known as the Elevator algorithm, is a disk scheduling algorithm used in computer storage systems to optimize the movement of the disk arm. It works by moving the disk arm in one direction, serving requests along the way, until it reaches the end of the disk. Then, it reverses direction and serves requests in the opposite direction until it reaches the other end of the disk. This back-and-forth movement mimics the motion of an elevator, hence the alternative name.</p>
+            <div>
+                <button type="button"><a href="file:///C:/Users/suhan/OneDrive/Desktop/OS/ScanDisk.html">Scan Disk Simulator</a></button>
+            </div>
+        </div>
+        
+    </div>
+</body>

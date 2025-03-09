@@ -1,0 +1,125 @@
+*{
+  margin: 0;
+  padding: 0;
+  }
+  .main{
+  width: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.5)50%,rgba(0,0,0,0.5)50%),url(cover.jpg);
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  font-family: sans-serif;
+  padding-left: 5%;
+  padding-right: 5%;
+  box-sizing: border-box;
+  }
+  .navbar{
+    width: 95%;
+    height: auto;
+    margin-left: 30px;
+    }
+  .logo {
+    color: #ffffff;
+    width: 20px;
+    font-family: Georgia, serif;
+    float: left;
+    padding-top: .6%;
+    cursor: pointer;
+    }
+  ul {
+    flex: 1;
+    text-align: right;
+    float: right;
+    list-style-type: none;
+    margin-top: 30px;
+    min-height: 400px;
+    margin-right: 60px;
+    font-size: 17px;
+    }
+  ul li{
+    display: inline-block;
+    margin-left: 60px;
+  }
+  ul li a {
+      text-decoration: none;
+      color: #fff;
+      padding: 5px 20px;
+      border: 1px solid transparent;
+      transition: 0.5 ease;
+  }
+  ul li a:hover{
+      background-color: #fff;
+      color: #000;
+  }
+  .row{
+    display: flex;
+    height: 88%;
+    align-items: center;
+    text-align: left;
+    }
+    .col{
+      flex-basis: 95%;
+    }
+    h1{
+      color: floralwhite;
+      font-size: 70px;
+    }
+    p{
+      color: #fff;
+      font-size: 15px;
+      line-height: 15px;
+    }
+    .card{
+      width: 200px;
+      height: 230px;
+      display: inline-block;
+      border-radius:10px;
+      padding: 15px 25px;
+      box-sizing: border-box;
+      cursor: pointer;
+      margin: 10px 15px;
+      background-position: center;
+      background-size: cover;
+      transition: transform 0.5s;
+    }
+    .card1{
+      background-image: url(cover2.png);
+    }
+    .card2{
+      background-image: url(cover2.png);
+    }
+    .card3{
+      background-image: url(cover2.png);
+    }
+    .card4{
+      background-image: url(cover2.png); 
+    }
+    h5{
+      color: floralwhite;
+      font-size: 20px;
+    }
+    .card:hover{
+      transform: translateY(-10px);
+    }
+
+    .button{
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      gap: 50px;
+    }
+
+    .btn{
+      border:1px solid #fff;
+      padding: 10px 20px;
+      color: #fff;
+      transition: 0.5 ease;
+      font-size: 18px;
+      text-decoration: none;
+    }
+
+    .btn:hover{
+      background-color: #fff;
+      color: #000;
+    }

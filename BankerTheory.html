@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANKER'S DEADLOCK THEORY</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5)50%,rgba(0,0,0,0.5)50%),url(cover1.jpg);
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            font-family: sans-serif;
+            box-sizing: border-box;
+        }
+        .content{
+            width: 100%;
+            position: absolute;
+            top: 30%;
+            transform: translateY(-50%);
+            text-align: center;
+            color: floralwhite;
+        }
+        .content h1{
+            font-size: 70px;
+            margin-top: 80px;
+        }
+        .content p{
+            margin: 20px auto;
+            font-weight: 100;
+            line-height: 25px;
+        }
+        button{
+            width:200px;
+            padding: 15px 0;
+            text-align: center;
+            margin: 20px 10px;
+            border-radius: 25px;
+            font-weight: bold;
+            border: 2px solid whitesmoke;
+            background:transparent;
+            color: rgb(251, 251, 250);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="content">
+            <h1>Banker's Deadlock Avoidance</h1>
+            <p>The Banker's algorithm is a deadlock avoidance technique used in operating systems for resource allocation. It operates by checking whether granting a resource request will leave the system in a safe state, meaning it can avoid deadlock. It does this by analyzing the maximum resource needs of each process, the currently allocated resources, and the available resources in the system. If the allocation is safe, resources are granted; otherwise, the request is denied to prevent deadlock. This algorithm ensures that processes can proceed without the risk of getting stuck in a deadlock situation.</p>
+            <div>
+                <button type="button"><a href="file:///C:/Users/suhan/OneDrive/Desktop/OS/Banker.html">Banker's Deadlock Simulator</a></button>
+            </div>
+        </div>
+        
+    </div>
+</body>

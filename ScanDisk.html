@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling - SCAN Algorithm</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        canvas {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Disk Scheduling - SCAN Algorithm</h1>
+        <div class="input-group">
+            <label for="queue">Disk Queue (comma-separated):</label>
+            <input type="text" id="queue" placeholder="Enter disk queue">
+        </div>
+        <div class="input-group">
+            <label for="head">Head Position:</label>
+            <input type="number" id="head" placeholder="Enter head position">
+        </div>
+        <div class="input-group">
+            <label for="direction">Direction:</label>
+            <input type="text" id="direction" placeholder="Enter direction (right/left)">
+        </div>
+        <button id="runButton">Run SCAN</button>
+        <canvas id="myChart" width="800" height="400"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        document.getElementById("runButton").addEventListener("click", function() {
+        var diskQueue = document.getElementById("queue").value.split(',').map(function(x) {
+            return parseInt(x.trim());
+        });
+        var headPosition = parseInt(document.getElementById("head").value);
+        var direction = document.getElementById("direction").value.trim();
+
+        var result = scan(diskQueue, headPosition, direction);
+
+        // Visualize disk head movements
+        drawChart(result);
+
+        var movementText = "Head Movements:\n";
+        result.forEach(function(move) {
+            movementText += "Move from " + move[0] + " to " + move[1] + "\n";
+        });
+        movementText += "\nTotal head movement: " + result.reduce(function(acc, move) {
+            return acc + Math.abs(move[1] - move[0]);
+        }, 0) + " tracks";
+
+        alert("Scan Results\n" + movementText);
+        });
+
+        function scan(diskQueue, headPosition, direction) {
+            var totalMovement = 0;
+            var movements = [];
+
+            while (diskQueue.length > 0) {
+                var nextRequest;
+                if (direction === 'right') {
+                    nextRequest = Math.min.apply(Math, diskQueue.filter(function(x) {
+                        return x >= headPosition;
+                    }));
+                    if (nextRequest === Infinity) {
+                        direction = 'left';
+                        continue;
+                    }
+                } else {
+                    nextRequest = Math.max.apply(Math, diskQueue.filter(function(x) {
+                        return x <= headPosition;
+                    }));
+                    if (nextRequest === -Infinity) {
+                        direction = 'right';
+                        continue;
+                    }
+                }
+                movements.push([headPosition, nextRequest]);
+                totalMovement += Math.abs(nextRequest - headPosition);
+                headPosition = nextRequest;
+                diskQueue.splice(diskQueue.indexOf(nextRequest), 1);
+            }
+            return movements;
+        }
+
+        function drawChart(data) {
+            var chartData = data.map(function(move) {
+                return {x: move[0], y: move[1]};
+            });
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Disk Head Movements (SCAN Algorithm)',
+                        data: chartData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>

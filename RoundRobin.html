@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round Robin Scheduling</title>
+    <style>
+        .input-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .input-container label {
+            width: 150px;
+        }
+        .input-container input {
+            width: 100px;
+        }
+    
+    table {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Style for the completed time, turnaround time, and waiting time columns */
+    #tblResults th:nth-child(4),
+    #tblResults td:nth-child(4) {
+        background-color: #d9edf7;
+    }
+
+    #tblResults th:nth-child(5),
+    #tblResults td:nth-child(5) {
+        background-color: #f7d9d9;
+    }
+
+    #tblResults th:nth-child(6),
+    #tblResults td:nth-child(6) {
+        background-color: #d9f7d9;
+    }
+
+    /* Gantt chart styles */
+    .gantt {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .bar {
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid black;
+    }
+
+    </style>
+</head>
+<body>
+    <h1>Round Robin Scheduling</h1>
+    <div class="input-container">
+        <label for="num_processes">Number of Processes:</label>
+        <input type="number" id="num_processes" min="1" max="5">
+    </div>
+    <div class="input-container">
+        <label for="quantum">Quantum Time Slice:</label>
+        <input type="number" id="quantum" min="1">
+    </div>
+    <div class="input-container">
+        <label for="burst_times">Burst Times:</label>
+        <input type="text" id="burst_times" required>
+    </div>
+    <div class="input-container">
+        <label for="arrival_times">Arrival Times:</label>
+        <input type="text" id="arrival_times" required>
+    </div>
+    <div class="row border-primary">
+      <div class="col-md-9">
+          <table class="table table-bordered" id="tblResults">
+              <thead>
+                  <tr>
+                      <th scope="col">Process ID</th>
+                      <th scope="col">Arrival Time</th>
+                      <th scope="col">Burst Time</th>
+                      <th scope="col">Completed Time</th>
+                      <th scope="col">Waiting Time</th>
+                      <th scope="col">Turnaround Time</th>
+                  </tr>
+              </thead>
+              <tbody> 
+              </tbody>
+          </table>
+          <div class="gantt" id="ganttChart"></div>
+      </div>
+      <div class="col-md-3 border border-primary p-3 mb-2">
+          <div class="form">
+              <div class="form-group">
+                  <label for="avgTurnaroundTime">Average Turnaround Time</label>
+                  <input class="form-control" id="avgTurnaroundTime" type="number" placeholder="0" disabled>
+              </div>
+              <div class="form-group">
+                  <label for="avgTurnaroundTime">Average Waiting Time</label>
+                  <input class="form-control" id="avgWaitingTime" type="number" placeholder="0" disabled>
+              </div>
+              
+          </div>
+      </div>
+  </div>
+    <button id="execute_round_robin">Execute Round Robin</button>
+    <p id="output_text"></p>
+    <script>
+        function round_robin(processes, quantum) {
+            let queue = [...processes];
+            let time = 0;
+            let output_text = "";
+            let completed_times = [];
+            let waiting_times = [];
+            let turnaround_times = [];
+            let gantt_chart = '';
+
+            while (queue.length) {
+                for (let i = 0; i < queue.length; i++) {
+                    let current_process = queue.shift();
+                    if (current_process.burst_time <= quantum) {
+                        output_text += `Process ${current_process.id} executed for ${current_process.burst_time} units\n`;
+                        time += current_process.burst_time;
+                        completed_times.push(time);
+                        waiting_time = time - current_process.arrival_time - current_process.burst_time;
+                        waiting_times.push(waiting_time < 0 ? 0 : waiting_time);
+                        turnaround_time = time - current_process.arrival_time;
+                        turnaround_times.push(turnaround_time);
+                        gantt_chart += `<div class="bar" style="width:${current_process.burst_time * 20}px;">P${current_process.id}</div>`;
+                    } else {
+                        output_text += `Process ${current_process.id} executed for ${quantum} units\n`;
+                        current_process.burst_time -= quantum;
+                        time += quantum;
+                        queue.push(current_process);
+                        gantt_chart += `<div class="bar" style="width:${quantum * 20}px;">P${current_process.id}</div>`;
+                    }
+                }
+            }
+            return {
+                output_text: output_text,
+                completed_times: completed_times,
+                waiting_times: waiting_times,
+                turnaround_times: turnaround_times,
+                gantt_chart: gantt_chart
+            };
+        }
+
+        function execute_round_robin() {
+            let quantum = parseInt(document.getElementById("quantum").value);
+            let num_processes = parseInt(document.getElementById("num_processes").value);
+            let burst_times_str = document.getElementById("burst_times").value;
+            let arrival_times_str = document.getElementById("arrival_times").value;
+            let burst_times = burst_times_str.split(' ').map(Number);
+            let arrival_times = arrival_times_str.split(' ').map(Number);
+
+            let processes = [];
+            for (let i = 0; i < num_processes; i++) {
+                processes.push({ id: i + 1, burst_time: burst_times[i], arrival_time: arrival_times[i] });
+            }
+
+            // Create a copy of original processes to preserve original burst times
+            let originalProcesses = JSON.parse(JSON.stringify(processes));
+
+            // Filter out processes with burst time > 0
+            processes = processes.filter(process => process.burst_time > 0);
+
+            let result = round_robin(processes, quantum);
+            document.getElementById("output_text").innerText = result.output_text;
+
+            // Update table
+            let tbody = document.querySelector("#tblResults tbody");
+            tbody.innerHTML = "";
+            for (let i = 0; i < processes.length; i++) {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${processes[i].id}</td>
+                    <td>${processes[i].arrival_time}</td>
+                    <td>${originalProcesses[i].burst_time}</td>
+                    <td>${result.completed_times[i] || '-'}</td>
+                    <td>${result.waiting_times[i] || '-'}</td>
+                    <td>${result.turnaround_times[i] || '-'}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            // Gantt chart
+            document.getElementById('ganttChart').innerHTML = result.gantt_chart;
+
+            // Calculate average values
+            let total_waiting_time = result.waiting_times.reduce((a, b) => a + b, 0);
+            let total_turnaround_time = result.turnaround_times.reduce((a, b) => a + b, 0);
+            let total_burst_time = processes.map(p => p.burst_time).reduce((a, b) => a + b, 0);
+            let num_completed_processes = result.waiting_times.length;
+
+            document.getElementById("avgWaitingTime").value = total_waiting_time / num_completed_processes;
+            document.getElementById("avgTurnaroundTime").value = total_turnaround_time / num_completed_processes;
+        }
+
+        document.getElementById("execute_round_robin").addEventListener("click", execute_round_robin);
+    </script>
+</body>
+</html>
